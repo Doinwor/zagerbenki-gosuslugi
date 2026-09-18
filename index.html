@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Госуслуги города Загербенки</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='8' fill='%23ffd400'/%3E%3Crect y='8' width='16' height='8' fill='%230057b8'/%3E%3C/svg%3E">
+  <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #eef1f6;
+  color: #1c2333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Флаг города: жёлтый сверху, синий снизу */
+.flag {
+  height: 64px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
+}
+
+.strip {
+  flex: 1;
+}
+
+.stripe-yellow {
+  background: #ffd400;
+}
+
+.stripe-blue {
+  background: #0057b8;
+}
+
+.container {
+  flex: 1;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 16px 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.portal-header {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.portal-header h1 {
+  font-size: 25px;
+  color: #1c2333;
+}
+
+.portal-header .city {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1c2333;
+  margin-top: 6px;
+}
+
+.portal-header .subtitle {
+  font-size: 14px;
+  color: #46515f;
+  margin-top: 8px;
+}
+
+/* ---------- приветственный баннер ---------- */
+.hero {
+  background: transparent;
+  border: none;
+  padding: 8px 0 22px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.hero h2 {
+  font-size: 22px;
+  color: #1c2333;
+}
+
+.hero p {
+  font-size: 15px;
+  color: #46515f;
+  margin-top: 10px;
+  line-height: 1.55;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+/* ---------- кнопки ---------- */
+.btn-primary,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #ffd400, #e6bf00);
+  color: #1a1a1a;
+  border: 1px solid #c9a800;
+  padding: 10px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #ffe24d, #ffd400);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #10306b;
+  border: 1px solid #b9c4d4;
+  padding: 10px 22px;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: #eef2f8;
+}
+
+/* ---------- важное объявление ---------- */
+.announce {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: #ffffff;
+  border: 1px solid #dde3ec;
+  border-left: 4px solid #ffd400;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 28px;
+}
+
+.announce strong {
+  color: #1c2333;
+}
+
+.announce small {
+  display: block;
+  color: #5a6472;
+  margin-top: 4px;
+}
+
+/* ---------- услуги ---------- */
+.section-title {
+  font-size: 19px;
+  color: #1c2333;
+  margin-bottom: 14px;
+}
+
+.s-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 500px) {
+  .s-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.s-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #dde3ec;
+  border-radius: 12px;
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.s-tile:hover {
+  border-color: #b9c4d4;
+  box-shadow: 0 6px 18px rgba(16, 48, 107, 0.08);
+}
+
+.s-tile.muted {
+  opacity: 0.8;
+  cursor: default;
+}
+
+.s-tile.muted:hover {
+  border-color: #dde3ec;
+  box-shadow: none;
+}
+
+.s-tile.hot {
+  border-color: #c9a800;
+  background: linear-gradient(180deg, #fffdf0, #fff8da);
+}
+
+.tile-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #f0f3f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.s-tile.hot .tile-icon {
+  background: #ffd400;
+}
+
+.tile-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1c2333;
+}
+
+.tile-desc {
+  font-size: 13px;
+  color: #5a6472;
+  line-height: 1.45;
+  flex: 1;
+}
+
+.tile-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1c2333;
+}
+
+/* ---------- новости ---------- */
+.news {
+  margin-bottom: 28px;
+}
+
+.news-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e3e8f0;
+}
+
+.news-date {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #7a8494;
+  padding-top: 2px;
+}
+
+.news-text {
+  font-size: 14px;
+  color: #1c2333;
+  line-height: 1.5;
+}
+
+/* ---------- итоги голосования ---------- */
+.results-over {
+  background: #ffffff;
+  border: 1px solid #dde3ec;
+  border-left: 4px solid #0057b8;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 28px;
+}
+
+.results-over h3 {
+  font-size: 16px;
+  color: #1c2333;
+  margin-bottom: 8px;
+}
+
+.winner-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 8px 0;
+  border-top: 1px solid #e6eaf1;
+  font-size: 14px;
+  color: #1c2333;
+  flex-wrap: wrap;
+}
+
+footer {
+  text-align: center;
+  font-size: 13px;
+  color: #7a8494;
+  margin-top: 28px;
+}
+
+footer .footer-address {
+  margin-top: 4px;
+}
+
+.hidden {
+  display: none;
+}
+</style></head>
+<body>
+
+  <div class="flag">
+    <div class="strip stripe-yellow"></div>
+    <div class="strip stripe-blue"></div>
+  </div>
+
+  <main class="container">
+
+    <header class="portal-header">
+      <h1>Госуслуги города Загербенки</h1>
+      <p class="city">Портал государственных услуг</p>
+      <p class="subtitle">Все услуги города — быстро и онлайн.</p>
+    </header>
+
+    <!-- Приветственный баннер -->
+    <section class="hero">
+      <h2>Добро пожаловать на портал Загербенки</h2>
+      <p>Голосование по выборам главы города уже открыто.<br>Ваш голос определяет будущее Загербенки.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="voting.html">Проголосовать онлайн</a>
+        <a class="btn-ghost" href="#services">Об услугах</a>
+      </div>
+    </section>
+
+    <!-- Важное объявление -->
+    <div class="announce" id="announce">
+      <div>
+        <strong>18 сентября — последний день голосования</strong>
+        <small>Приём заявок закрывается в 23:59 (МСК). Успейте проголосовать!</small>
+      </div>
+      <a class="btn-primary" href="voting.html">Проголосовать</a>
+    </div>
+
+    <!-- Итоги голосования (появляются после закрытия 23:59) -->
+    <div class="results-over hidden" id="results-over">
+      <h3>Голосование завершено — итоги выборов</h3>
+      <div class="winner-line">Первый губернатор — <strong>Дрибница Степан Анатольевич</strong></div>
+      <div class="winner-line">Второй губернатор — <strong>Трахал Намазимат Мазумитович</strong></div>
+    </div>
+
+    <!-- Услуги -->
+    <h2 class="section-title" id="services">Популярные услуги</h2>
+    <div class="s-grid">
+      <a class="s-tile hot" href="voting.html">
+        <div class="tile-top">
+          <span class="tile-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1c2333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7h16v13H4z"/>
+              <path d="M8 13l3 3 5-6"/>
+            </svg>
+          </span>
+          <span class="tile-title">Электронное голосование</span>
+        </div>
+        <span class="tile-desc">Выборы главы города Загербенки. Голосуйте онлайн за две минуты.</span>
+        <span class="tile-link">Перейти &rarr;</span>
+      </a>
+
+      <div class="s-tile muted">
+        <div class="tile-top">
+          <span class="tile-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7a8494" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 21V5l8-3 8 3v16"/>
+              <path d="M2 21h20"/>
+              <path d="M9 21v-6h6v6"/>
+            </svg>
+          </span>
+          <span class="tile-title">Запись в МФЦ</span>
+        </div>
+        <span class="tile-desc">Запись к специалистам многофункционального центра.</span>
+        <span class="tile-link">Скоро</span>
+      </div>
+
+      <div class="s-tile muted">
+        <div class="tile-top">
+          <span class="tile-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7a8494" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="5" width="20" height="14" rx="2"/>
+              <path d="M2 10h20"/>
+            </svg>
+          </span>
+          <span class="tile-title">Оплата ЖКУ</span>
+        </div>
+        <span class="tile-desc">Жилищно-коммунальные услуги без очередей.</span>
+        <span class="tile-link">Скоро</span>
+      </div>
+
+      <div class="s-tile muted">
+        <div class="tile-top">
+          <span class="tile-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7a8494" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 3H6v18h12V7l-4-4z"/>
+              <path d="M14 3v4h4"/>
+              <path d="M9 13h6"/>
+              <path d="M9 17h6"/>
+            </svg>
+          </span>
+          <span class="tile-title">Справки и документы</span>
+        </div>
+        <span class="tile-desc">Заказ справок и выписок в электронном виде.</span>
+        <span class="tile-link">Скоро</span>
+      </div>
+
+      <a class="s-tile" href="support.html">
+        <div class="tile-top">
+          <span class="tile-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1c2333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/>
+            </svg>
+          </span>
+          <span class="tile-title">Социальная поддержка</span>
+        </div>
+        <span class="tile-desc">Льготы, пособия и выплаты жителям города.</span>
+        <span class="tile-link">Перейти &rarr;</span>
+      </a>
+
+      <div class="s-tile muted">
+        <div class="tile-top">
+          <span class="tile-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7a8494" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 11l9-7 9 7"/>
+              <path d="M5 9.5V21h14V9.5"/>
+              <path d="M10 21v-6h4v6"/>
+            </svg>
+          </span>
+          <span class="tile-title">Кадастр и имущество</span>
+        </div>
+        <span class="tile-desc">Сведения о недвижимости и кадастровые услуги.</span>
+        <span class="tile-link">Скоро</span>
+      </div>
+    </div>
+
+    <!-- Новости -->
+    <h2 class="section-title">Новости города</h2>
+    <div class="news">
+      <div class="news-item hidden" id="news-results">
+        <span class="news-date">18.09.2026</span>
+        <span class="news-text"><strong>Выборы завершены.</strong> Одержали победу Дрибница Степан Анатольевич и Трахал Намазимат Мазумитович. Подробности — на странице электронного голосования.</span>
+      </div>
+      <div class="news-item" id="news-open">
+        <span class="news-date">17.09.2026</span>
+        <span class="news-text"><strong>Голосование открыто.</strong> В бюллетень включены обе должности губернатора города.</span>
+      </div>
+      <div class="news-item">
+        <span class="news-date">10.09.2026</span>
+        <span class="news-text">Избирательный пункт №1 на улице Кирова, дом 7 работает ежедневно до 20:00.</span>
+      </div>
+      <div class="news-item">
+        <span class="news-date">01.09.2026</span>
+        <span class="news-text">Завершилась регистрация кандидатов на пост главы города.</span>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-main">Администрация города Загербенки</div>
+      <div class="footer-address">Город Загербенки, Кировский район, улица Кирова, дом 7. Избирательный пункт №1 имени В. И. Новодворской</div>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      var END = new Date("2026-09-18T23:59:59+03:00").getTime();
+
+      function over() {
+        return Date.now() >= END;
+      }
+
+      function apply() {
+        if (!over()) return;
+        var r = document.getElementById("results-over");
+        if (r) r.classList.remove("hidden");
+        var a = document.getElementById("announce");
+        if (a) a.classList.add("hidden");
+        var n = document.getElementById("news-results");
+        if (n) n.classList.remove("hidden");
+        var o = document.getElementById("news-open");
+        if (o) o.classList.add("hidden");
+      }
+
+      setInterval(apply, 1000);
+      apply();
+    })();
+  </script>
+
+</body>
+</html>
